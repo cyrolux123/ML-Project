@@ -17,7 +17,7 @@ from xgboost import XGBRegressor
 
 from src.exception import CustomException
 from src.logger import logging
-from src.utils import save_object, evaluate_model
+from src.utils import save_object, evaluate_models
 
 @dataclass
 class ModelTrainerConfig:
@@ -47,7 +47,7 @@ class ModelTrainer:
                 'AdaBoost Regressor' : AdaBoostRegressor()
             }
 
-            model_report : dict = evaluate_model(X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test models = models)
+            model_report : dict = evaluate_models(X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test, models = models)
 
             # To get best model score from dict
             best_model_score = max(sorted(model_report.values()))
@@ -68,8 +68,8 @@ class ModelTrainer:
 
             predicted = best_model.predict(X_test)
 
-            r2_score = r2_score(y_test, predicted)
-            return r2_score
+            model_r2_score = r2_score(y_test, predicted)
+            return model_r2_score
         
         except Exception as e:
             raise CustomException(e, sys)
